@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: repo-with-secrets
+  description: Template for Creation repo With Secrets
+spec:
+  type: service
+  owner: service@example.com
+  lifecycle: experimental

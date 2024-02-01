@@ -1,0 +1,87 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: repo-with-secrets
+  title: Creating Repository With Secrets
+  description: We will try to create repo with attached secrets
+  tags:
+    - secrets
+    - demo
+    - repositories
+spec:
+  owner: service@example.com
+  type: service
+
+  parameters:
+    - title: Provide some simple information
+      required:
+        - filename
+      properties:
+        filename:
+          title: File Name
+          type: string
+          description: Value To Name File
+
+        dummy:
+          title: Some Value
+          type: string
+          description: Dummy Value To Insert
+          default: dummy_placeholder
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutTemplating:
+          - .github/workflows/*
+        values:
+          filename: ${{parameters.filename}}
+          dummy: ${{parameters.dummy}}
+
+    - id: crete
+      name: Create Repo And Insert Secrets
+      action: github:repo:create
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        secrets:
+          AWS_ACCESS_KEY_ID: some-key
+          AWS_SECRET_ACCESS_KEY: some-secret
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ["github.com"]
+        description: This is ${{ parameters.filename }} repository
+        repoUrl: ${{ parameters.repoUrl }}
+        
+
+    # - id: cicd
+    #   name: Dispatch Github Action Workflow
+    #   action: github:actions:dispatch
+    #   input:
+    #     repoUrl: ${{parameters.repoUrl}}
+    #     workflowId: demo1.yml
+    #     branchOrTagName: main
+
+    - id: register
+      name: Register
+      action: debug:log
+      input:
+        message: ${{ steps['publish'].output.remoteUrl }}
+
+
