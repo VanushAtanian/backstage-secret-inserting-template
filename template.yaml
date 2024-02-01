@@ -62,13 +62,19 @@ spec:
           AWS_ACCESS_KEY_ID: some_key
           AWS_SECRET_ACCESS_KEY: some-secret
 
-    - id: publish
-      name: Publish
-      action: publish:github
+    - id: push
+      name: Fill With Content Already Created Repo
+      action: github:repo:push
       input:
-        allowedHosts: ["github.com"]
-        description: This is ${{ parameters.filename }} repository
         repoUrl: ${{ parameters.repoUrl }}
+
+    # - id: publish
+    #   name: Publish
+    #   action: publish:github
+    #   input:
+    #     allowedHosts: ["github.com"]
+    #     description: This is ${{ parameters.filename }} repository
+    #     repoUrl: ${{ parameters.repoUrl }}
         
 
     # - id: cicd
