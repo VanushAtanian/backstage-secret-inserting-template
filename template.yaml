@@ -52,14 +52,17 @@ spec:
           filename: ${{parameters.filename}}
           dummy: ${{parameters.dummy}}
 
-    - id: crete
+    - id: cretae
       name: Create Repo And Insert Secrets
       action: github:repo:create
       input:
         repoUrl: ${{ parameters.repoUrl }}
+        owner: 
         secrets:
-          AWS_ACCESS_KEY_ID: some-key
-          AWS_SECRET_ACCESS_KEY: some-secret
+          - name: AWS_ACCESS_KEY_ID
+            value: some_key
+          - name: AWS_SECRET_ACCESS_KEY 
+            value: some-secret
 
     - id: publish
       name: Publish
