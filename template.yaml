@@ -59,10 +59,8 @@ spec:
         repoUrl: ${{ parameters.repoUrl }}
         owner: 
         secrets:
-          - name: "AWS_ACCESS_KEY_ID"
-            value: "some_key"
-          - name: "AWS_SECRET_ACCESS_KEY "
-            value: "some-secret"
+          AWS_ACCESS_KEY_ID: some_key
+          AWS_SECRET_ACCESS_KEY: some-secret
 
     - id: publish
       name: Publish
